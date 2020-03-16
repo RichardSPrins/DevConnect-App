@@ -8,6 +8,20 @@ const Post = require('../../models/Post')
 const Profile = require('../../models/Profile')
 
 
+// @route    GET api/posts/
+// @desc     Get All Posts
+// @access   Private
+
+router.get('/', auth, async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ date: -1})
+    res.json(posts)
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).send('Server Error')
+  }
+})
+
 
 // @route    POST api/posts
 // @desc     Makes a new Post
@@ -51,21 +65,6 @@ router.post('/',
 )
 
 
-// @route    GET api/posts/
-// @desc     Get All Posts
-// @access   Private
-
-router.get('/', auth, async (req, res) => {
-  try {
-    const posts = await Post.find().sort({ date: -1})
-    res.json(posts)
-  } catch (error) {
-    console.error(error.message)
-    res.status(500).send('Server Error')
-  }
-})
-
-
 // @route    GET api/posts/:post_id
 // @desc     Get post by id
 // @access   Private
@@ -87,20 +86,6 @@ router.get('/:post_id', auth, async (req, res) => {
     res.status(500).send('Server Error')
   }
 })
-
-
-// @route    PUT api/posts
-// @desc     Test route
-// @access   Public
-
-router.put('/', (req, res) => res.send('Posts Route'))
-
-
-// @route    PUT api/posts/:post_id/comments/:comment_id
-// @desc     Test route
-// @access   Public
-
-router.put('/', (req, res) => res.send('Posts Route'))
 
 
 // @route    DELETE api/posts/:post_id
@@ -127,13 +112,109 @@ router.delete('/:post_id', auth, async (req, res) => {
       removedPost: post
     })
   } catch (error) {
-    console.error(error)
+    console.error(error.message)
     if(error.kind === 'ObjectId'){
       return res.status(404).json({ message: "Post not found."})
     }
     res.status(500).send('Server Error')
   }
 })
+
+
+// @route    PUT api/posts/like/:post_id
+// @desc     Like a post
+// @access   Private
+
+router.put('/like/:post_id',
+  auth,
+  async (req, res) => {
+    try {
+      // get post
+      const post = await Post.findById(req.params.post_id)
+
+      // check if psdt has already been liked
+      if(post.likes.filter(like => like.user.toString() === req.user.id).length > 0){
+        return res.status(400).json({ message: 'Post already liked' })
+      }
+
+      post.likes.unshift({ user: req.user.id })
+      // save post to db with new like
+      await post.save()
+      console.log('Post liked.')
+      res.json(post.likes)
+
+    } catch (error) {
+      console.error(error.message)
+      res.status(500).send('Server Error')
+    }
+})
+
+
+// @route    PUT api/posts/like/:post_id
+// @desc     Unike a post
+// @access   Private
+
+router.put('/unlike/:post_id',
+  auth,
+  async (req, res) => {
+    try {
+      // get post
+      const post = await Post.findById(req.params.post_id)
+
+      // check if psdt has already been liked
+      if(post.likes.filter(like => like.user.toString() === req.user.id).length === 0){
+        return res.status(400).json({ message: 'Post has not been liked' })
+      }
+
+      // get remove index
+      const removeIndex = post.likes.map(like => like.user.toString()).indexOf(req.user.id)
+      // save post to db with new like
+      post.likes.splice(removeIndex, 1)
+
+      await post.save()
+      console.log('Post liked.')
+      res.json(post.likes)
+
+    } catch (error) {
+      console.error(error.message)
+      res.status(500).send('Server Error')
+    }
+})
+
+// @route    PUT api/posts/:post_id/comments
+// @desc     Post new comment to a specific post
+// @access   Private
+
+router.post('/:post_id/comments',
+  auth, 
+  [
+    check('text', 'Comment text is required.').not().isEmpty()
+  ],
+  async (req, res) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+      return res.status(400).json({ errors: errors.array()})
+    }
+
+    try {
+
+      const user = await User.findById(req.user.id).select('-password')
+      
+
+      // const newComment
+    } catch (error) {
+      console.error(error.message)
+      res.status(500).send('Server Error.')
+    }
+  })
+
+
+// @route    PUT api/posts/:post_id/comments/:comment_id
+// @desc     Test route
+// @access   Public
+
+router.put('/', (req, res) => res.send('Posts Route'))
+
 
 
 // @route    DELETE api/posts/:post_id/comments/:comment_id
