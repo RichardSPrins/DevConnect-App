@@ -1,12 +1,15 @@
 import React from 'react';
 import './App.css';
-
 import Navbar from './Components/Layout/Navbar.component'
+import Landing from './Components/Layout/Landing.component'
+
+
 
 const App = () => {
   return (
     <>
-      <h1>DevConnect</h1>
+      <Navbar />
+      <Landing />
     </>
   );
 }
