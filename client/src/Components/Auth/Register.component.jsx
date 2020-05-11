@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { setAlert } from '../../redux/actions/alert'
+import { register } from '../../redux/actions/auth'
 import PropTypes from 'prop-types'
 
 import axios from 'axios'
@@ -14,7 +15,7 @@ const Register = (props) => {
     confirmPass: ''
   })
 
-  const { setAlert } = props
+  const { setAlert, register } = props
   const  { name, email, password, confirmPass } = formData
 
   const inputHandler = e => {
@@ -36,21 +37,7 @@ const Register = (props) => {
         email: email,
         password: password
       }
-      
-      try {
-        const config = {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-        
-        const body = JSON.stringify(newUser);
-        
-        const res = await axios.post('/api/users', body, config)
-        console.log(res.data)
-      } catch (error) {
-        setAlert(error.response.data.errors[0].msg, 'danger')
-      }
+      register(newUser)
     }
   }
 
@@ -66,7 +53,7 @@ const Register = (props) => {
             name="name"
             onChange={e => inputHandler(e)}
             value={name}
-            required 
+            // required 
           />
         </div>
         <div className="form-group">
@@ -108,6 +95,7 @@ const Register = (props) => {
 
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
 } 
 
-export default connect(null, { setAlert })(Register)
+export default connect(null, { setAlert, register })(Register)
