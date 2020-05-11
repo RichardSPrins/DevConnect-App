@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server",
-    "server": "nodemon server"
+    "server": "nodemon server",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -21,16 +23,16 @@
   "dependencies": {
     "bcrypt": "^3.0.8",
     "bcryptjs": "^2.4.3",
-    "config": "^3.2.5",
+    "config": "^3.3.1",
     "express": "^4.17.1",
-    "express-validator": "^6.4.0",
+    "express-validator": "^6.4.1",
     "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.8.11",
-    "request": "^2.88.0"
+    "mongoose": "^5.9.12",
+    "request": "^2.88.2"
   },
   "devDependencies": {
-    "concurrently": "^5.1.0",
-    "nodemon": "^2.0.2"
+    "concurrently": "^5.2.0",
+    "nodemon": "^2.0.3"
   }
 }
