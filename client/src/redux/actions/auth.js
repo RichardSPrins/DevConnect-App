@@ -3,6 +3,7 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL
 } from './types'
+
 import { setAlert } from './alert'
 
 import axios from 'axios'
