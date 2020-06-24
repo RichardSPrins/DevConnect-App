@@ -1,11 +1,15 @@
 import {
   REGISTER_START,
   REGISTER_SUCCESS,
-  REGISTER_FAIL
+  REGISTER_FAIL,
+  USER_LOADED,
+  AUTH_ERROR
 } from './types'
+
 import { setAlert } from './alert'
 
 import axios from 'axios'
+import setAuthToken from '../../utils/setAuthToken'
 
 // REGISTER USER action
 
@@ -33,5 +37,13 @@ export const register = ({ name, email, password }) => async dispatch => {
     dispatch({
       type: REGISTER_FAIL
     })
+  }
+}
+
+//LOAD USER action
+
+export const loadUser = () => async dispatch => {
+  if(localStorage.token){
+    setAuthToken(localStorage.token)
   }
 }

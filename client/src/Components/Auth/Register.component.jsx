@@ -5,7 +5,7 @@ import { setAlert } from '../../redux/actions/alert'
 import { register } from '../../redux/actions/auth'
 import PropTypes from 'prop-types'
 
-import axios from 'axios'
+
 
 const Register = (props) => {
   const [formData, setFormData] = useState({
@@ -53,7 +53,7 @@ const Register = (props) => {
             name="name"
             onChange={e => inputHandler(e)}
             value={name}
-            // required 
+            required 
           />
         </div>
         <div className="form-group">

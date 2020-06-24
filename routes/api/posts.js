@@ -40,7 +40,6 @@ router.post('/',
       return res.status(400).json({ errors: errors.array()})
     }
 
-
     try {
       // get user by id
       const user = await User.findById(req.user.id).select('-password')
