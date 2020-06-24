@@ -4,7 +4,7 @@ import {
   REGISTER_FAIL} from '../actions/types'
 
 const initialState = {
-  token: localStorage.getItem('x-auth-token'),
+  token: localStorage.getItem('token'),
   isAuthenticated: null,
   loading: true,
   user: null
@@ -20,7 +20,7 @@ const registerReducer = (state = initialState, action) => {
     //   }
 
     case REGISTER_SUCCESS:
-      localStorage.setItem('x-auth-token', action.payload.token);
+      localStorage.setItem('token', action.payload.token);
       return {
         ...state,
         ...action.payload,
@@ -29,7 +29,7 @@ const registerReducer = (state = initialState, action) => {
       }
 
     case REGISTER_FAIL:
-      localStorage.removeItem('x-auth-token')
+      localStorage.removeItem('token')
       return {
         ...state,
         token: null,

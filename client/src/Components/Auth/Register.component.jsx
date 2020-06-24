@@ -53,7 +53,7 @@ const Register = (props) => {
             name="name"
             onChange={e => inputHandler(e)}
             value={name}
-            // required 
+            required 
           />
         </div>
         <div className="form-group">

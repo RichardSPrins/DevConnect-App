@@ -15,7 +15,7 @@ const Login = (props) => {
 
   const  { email, password } = formData
   const { history, setAlert } = props;
-  const token = localStorage.getItem('x-auth-token')
+  const token = localStorage.getItem('token')
 
   const inputHandler = e => {
     setFormData({

@@ -9,10 +9,6 @@ import { Route, Switch } from 'react-router-dom'
 // Style imports
 import './App.css';
 
-
-
-
-
 const App = () => {
   return (
     <>
