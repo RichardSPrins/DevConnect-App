@@ -1,4 +1,5 @@
-import React from 'react';
+// React Imports
+import React, { useEffect } from 'react';
 // Component Imports
 import Navbar from './Components/Layout/Navbar.component'
 import Alert from './Components/Layout/Alert.component'
@@ -8,8 +9,22 @@ import Register from './Components/Auth/Register.component'
 import { Route, Switch } from 'react-router-dom'
 // Style imports
 import './App.css';
+// Action Imports
+import { loadUser } from './redux/actions/auth'
+// Util imports
+import setAuthToken from './utils/setAuthToken'
 
-const App = () => {
+const App = (props) => {
+  const { store } = props
+  // console.log(store)
+
+  useEffect(() => {
+    if(localStorage.token){
+      setAuthToken(localStorage.token)
+    }
+    store.dispatch(loadUser())
+  }, [])
+
   return (
     <>
       <Navbar />

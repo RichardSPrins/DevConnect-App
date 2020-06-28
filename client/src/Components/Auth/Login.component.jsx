@@ -46,7 +46,7 @@ const Login = (props) => {
         const body = JSON.stringify(user)
         const res = await axios.post('/api/auth', body, config)
         console.log(res.data)
-        localStorage.setItem('x-auth-token', res.data.token)
+        localStorage.setItem('token', res.data.token)
         history.push('/')
       } catch (error) {
         setAlert(error.response.data.errors[0].msg, 'danger')
