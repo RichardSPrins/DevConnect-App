@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { setAlert } from '../../redux/actions/alert'
 import { register } from '../../redux/actions/auth'
@@ -15,7 +15,7 @@ const Register = (props) => {
     confirmPass: ''
   })
 
-  const { setAlert, register } = props
+  const { setAlert, register, isAuthenticated } = props
   const  { name, email, password, confirmPass } = formData
 
   const inputHandler = e => {
@@ -30,8 +30,8 @@ const Register = (props) => {
     if(password !== confirmPass){
       setAlert('Passwords do not match', 'danger')
     } else {
-      // console.log(formData)
-      // console.log('Success!')
+      console.log(formData)
+      console.log('Success!')
       const newUser = {
         name: name,
         email: email,
@@ -39,6 +39,12 @@ const Register = (props) => {
       }
       register(newUser)
     }
+  }
+
+  // Redirect if authenticated
+
+  if(isAuthenticated){
+    return <Redirect to='/dashboard'/>
   }
 
   return (
@@ -96,6 +102,12 @@ const Register = (props) => {
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
 } 
 
-export default connect(null, { setAlert, register })(Register)
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(mapStateToProps, { setAlert, register })(Register)
