@@ -1,11 +1,13 @@
+// React Imports
 import React, { useState } from 'react'
 import { Link, Redirect } from 'react-router-dom'
+// Redux Imports
 import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
 import { setAlert } from '../../redux/actions/alert'
+import { loginUser } from '../../redux/actions/auth'
+// Dependency Imports
+import PropTypes from 'prop-types'
 
-
-import axios from 'axios'
 
 const Login = (props) => {
   const [formData, setFormData] = useState({
@@ -13,9 +15,11 @@ const Login = (props) => {
     password: ''
   })
 
-  const  { email, password } = formData
-  const { history, setAlert } = props;
-  const token = localStorage.getItem('token')
+  const { email, password } = formData
+  const { history, setAlert, loginUser, isAuthenticated } = props;
+  
+  // const token = localStorage.getItem('token')
+
 
   const inputHandler = e => {
     setFormData({
@@ -35,27 +39,15 @@ const Login = (props) => {
         email,
         password
       }
-      
-      try {
-        const config = {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-
-        const body = JSON.stringify(user)
-        const res = await axios.post('/api/auth', body, config)
-        console.log(res.data)
-        localStorage.setItem('x-auth-token', res.data.token)
-        history.push('/')
-      } catch (error) {
-        setAlert(error.response.data.errors[0].msg, 'danger')
-      }
+      loginUser(user)
+      // history.push('/')
     }
   }
 
-  if(token){
-    return <Redirect to='/'/>
+  // redirect if logged in
+
+  if(isAuthenticated){
+    return <Redirect to='/dashboard'/>
   }
 
   return (
@@ -93,7 +85,13 @@ const Login = (props) => {
 
 Login.propTypes = {
   setAlert: PropTypes.func.isRequired,
+  loginUser: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
 }
 
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+})
 
-export default connect(null, { setAlert })(Login)
+
+export default connect(mapStateToProps, { setAlert, loginUser })(Login)

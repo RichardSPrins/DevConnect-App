@@ -1,7 +1,11 @@
 import {
   REGISTER_START,
   REGISTER_SUCCESS, 
-  REGISTER_FAIL} from '../actions/types'
+  REGISTER_FAIL,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  USER_LOADED,
+  AUTH_ERROR} from '../actions/types'
 
 const initialState = {
   token: localStorage.getItem('token'),
@@ -11,31 +15,43 @@ const initialState = {
 }
 
 const registerReducer = (state = initialState, action) => {
-  switch (action.type) {
+  const { type, payload } = action
+  switch (type) {
     // case REGISTER_START:
-    //   localStorage.getItem('x-auth-token')
+    //   localStorage.getItem('token')
     //   return {
     //     ...state,
     //     loading: true
     //   }
-
+    case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
-      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('token', payload.token);
       return {
         ...state,
-        ...action.payload,
+        ...payload,
         isAuthenticated: true,
         loading: false
-      }
+      };
 
+
+    case USER_LOADED:
+      return { 
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        user: payload
+      };
+    
+    case LOGIN_FAIL:
     case REGISTER_FAIL:
+    case AUTH_ERROR:
       localStorage.removeItem('token')
       return {
         ...state,
         token: null,
         isAuthenticated: false,
-        loading: false
-      }
+        loading: false,
+      };
       
     default:
       return state;

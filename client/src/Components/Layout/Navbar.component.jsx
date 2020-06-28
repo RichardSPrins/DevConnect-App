@@ -1,7 +1,17 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { withRouter } from 'react-router'
+import { Link, Redirect } from 'react-router-dom'
+import { connect } from  'react-redux'
 
-const Navbar = () => {
+const Navbar = (props) => {
+  const { isAuthenticated, history } = props
+  // console.log(history)
+
+  const handleLogout = e => {
+    e.preventDefault()
+    localStorage.removeItem('token')
+    history.push('/')
+  }
   return (
     <nav className="navbar bg-dark">
       <h1>
@@ -12,10 +22,20 @@ const Navbar = () => {
       <ul>
         <li><Link to="/profiles">Developers</Link></li>
         <li><Link to="/register">Register</Link></li>
-        <li><Link to="/login">Login</Link></li>
+        {
+          isAuthenticated
+          ? <li style={{ cursor: 'pointer'}} onClick={handleLogout}>Log Out</li>
+          : <li><Link to="/login">Login</Link></li>
+        }
       </ul>
     </nav>
   )
 }
 
-export default Navbar
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+})
+
+const NavBarWithRouter = withRouter(Navbar)
+
+export default connect(mapStateToProps)(NavBarWithRouter)
