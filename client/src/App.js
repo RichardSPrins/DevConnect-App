@@ -13,6 +13,8 @@ import './App.css';
 import { loadUser } from './redux/actions/auth'
 // Util imports
 import setAuthToken from './utils/setAuthToken'
+import Dashboard from './Components/User/Dashboard.component';
+import Profiles from './Components/User/Profiles.component';
 
 const App = (props) => {
   const { store } = props
@@ -34,6 +36,8 @@ const App = (props) => {
         <Switch>
           <Route exact path="/register" component={Register}/>
           <Route exact path="/login" component={Login}/>
+          <Route exact path="/dashboard" component={Dashboard}/>
+          <Route exact path="/profiles" component={Profiles} />
         </Switch>
       </section>
     </>

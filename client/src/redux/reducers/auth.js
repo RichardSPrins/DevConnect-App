@@ -4,6 +4,7 @@ import {
   REGISTER_FAIL,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
+  LOGOUT,
   USER_LOADED,
   AUTH_ERROR} from '../actions/types'
 
@@ -43,6 +44,7 @@ const registerReducer = (state = initialState, action) => {
       };
     
     case LOGIN_FAIL:
+    case LOGOUT:
     case REGISTER_FAIL:
     case AUTH_ERROR:
       localStorage.removeItem('token')
